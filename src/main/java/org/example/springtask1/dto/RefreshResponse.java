@@ -1,4 +1,4 @@
-package org.example.springtask1.security.dto;
+package org.example.springtask1.dto;
 
 import lombok.Getter;
 import lombok.Setter;

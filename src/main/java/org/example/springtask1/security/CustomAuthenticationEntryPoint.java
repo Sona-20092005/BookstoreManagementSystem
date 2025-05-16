@@ -36,9 +36,11 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         final Throwable throwable = authException.getCause() == null ? authException : authException.getCause();
         if (throwable instanceof BadCredentialsException) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        } else if (throwable instanceof LockedException) {
+        }
+        else if (throwable instanceof LockedException) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        } else {
+        }
+        else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
 

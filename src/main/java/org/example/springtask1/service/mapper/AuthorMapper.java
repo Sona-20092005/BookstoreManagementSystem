@@ -45,18 +45,20 @@ public class AuthorMapper {
         return author;
     }
 
-//    public List<BookAuthor> mapFromDtos(List<AuthorDto> authorList) {
-//        List<BookAuthor> bookAuthors = new ArrayList<>();
-//
-//        for (AuthorDto authorDto : authorList) {
-//            BookAuthor bookAuthor = new BookAuthor();
-//            bookAuthor.setAuthor(mapFromDto(authorDto));
-//            bookAuthor.setAuthorRole(authorDto.getRole());
-//            bookAuthors.add(bookAuthor);
-//        }
-//
-//        return bookAuthors;
-//    }
+    public List<BookAuthor> mapFromDtosToBookAuthor(List<AuthorDto> authorList, Book book) {
+        List<BookAuthor> bookAuthors = new ArrayList<>();
+
+        for (AuthorDto authorDto : authorList) {
+            Author author = mapFromDto(authorDto);
+            book.addBookAuthor(author, authorDto.getRole());
+            BookAuthor bookAuthor = new BookAuthor();
+            bookAuthor.setAuthor(mapFromDto(authorDto));
+            bookAuthor.setAuthorRole(authorDto.getRole());
+            bookAuthors.add(bookAuthor);
+        }
+
+        return bookAuthors;
+    }
 
     public List<Author> mapFromDtos(List<AuthorDto> authorList, Book book) {
         List<Author> authors = new ArrayList<>();

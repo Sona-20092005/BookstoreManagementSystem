@@ -44,27 +44,4 @@ public class CSVUploadController {
         return ResponseEntity.ok(response.toString());
     }
 
-//    @PostMapping("/update")
-//    public ResponseEntity<String> updateCSV(@RequestParam("file") MultipartFile file) {
-//        if (file.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("File is empty");
-//        }
-//
-//        BookUploadResult result = serviceJackson.update(file);
-//
-//        if (result == null) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Unable to perform request");
-//        }
-//
-//        StringBuilder response = new StringBuilder();
-//
-//        for (BookError bookError : result.getBookErrorList()) {
-//            response.append(bookError.getBookErrorState());
-//            response.append(": ");
-//            response.append(bookError.getBookDto());
-//            response.append("\n");
-//        }
-//
-//        return ResponseEntity.ok(response.toString());
-//    }
 }

@@ -1,4 +1,4 @@
-package org.example.springtask1.security.dto;
+package org.example.springtask1.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

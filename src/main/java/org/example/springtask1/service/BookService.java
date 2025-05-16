@@ -3,7 +3,10 @@ package org.example.springtask1.service;
 import lombok.RequiredArgsConstructor;
 import org.example.springtask1.criteria.BookSearchCriteria;
 import org.example.springtask1.dto.*;
+import org.example.springtask1.dto.bookdto.BookCreateDto;
+import org.example.springtask1.dto.bookdto.BookDto;
 import org.example.springtask1.dto.bookdto.BookResponseDto;
+import org.example.springtask1.dto.bookdto.BookResponseShortDto;
 import org.example.springtask1.persistence.entity.Author;
 import org.example.springtask1.persistence.entity.*;
 import org.example.springtask1.persistence.repository.*;
@@ -100,23 +103,90 @@ public class BookService {
     }
 
 
-    public PageResponseDto<BookResponseDto> getAll(BookSearchCriteria criteria) {
+//    public PageResponseDto<BookResponseDto> getAll(BookSearchCriteria criteria) {
+//        Page<Book> bookPage = bookRepository.findAll(criteria, criteria.buildPageRequest());
+//
+//        Page<BookResponseDto> bookResponseDtoPage = bookPage.map(book -> convertToBookResponseDto(book));
+//
+//        return PageResponseDto.from(bookResponseDtoPage);
+//    }
+
+    public PageResponseDto<BookResponseShortDto> getAll(BookSearchCriteria criteria) {
         Page<Book> bookPage = bookRepository.findAll(criteria, criteria.buildPageRequest());
 
-        Page<BookResponseDto> bookResponseDtoPage = bookPage.map(book -> convertToDto(book));
+        Page<BookResponseShortDto> bookResponseDtoPage = bookPage.map(book -> convertToBookResponseShortDto(book));
 
         return PageResponseDto.from(bookResponseDtoPage);
     }
+
 
     public BookResponseDto getBook(Long id) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Book not found with id: " + id));
 
-        return convertToDto(book);
+        return convertToBookResponseDto(book);
+    }
+
+    public BookResponseDto createBook(BookCreateDto dto) {
+        Book newBook = new Book();
+        newBook.setId(dto.getId());
+        newBook.setIsbn(dto.getIsbn());
+        newBook.setTitle(dto.getTitle());
+        newBook.setBookId(dto.getBookId());
+        newBook.setDescription(dto.getDescription());
+        newBook.setRating(dto.getRating());
+        newBook.setEdition(dto.getEdition());
+        newBook.setPages(dto.getPages());
+        newBook.setPrice(dto.getPrice());
+        newBook.setPublishDate(dto.getPublishDate());
+        newBook.setFirstPublishDate(dto.getFirstPublishDate());
+        newBook.setNumRatings(dto.getNumRatings());
+        newBook.setRatingsByStars(dto.getRatingsByStars());
+        newBook.setLikedPercent(dto.getLikedPercent());
+        newBook.setCoverImg(dto.getCoverImg());
+        newBook.setBbeScore(dto.getBbeScore());
+        newBook.setBbeVotes(dto.getBbeVotes());
+//
+////        Book book = bookRepository.findById(id)
+////                .orElseThrow(() -> new RuntimeException("Book not found with id: " + id));
+////
+////        newBook.setAuthors(authorMapper.mapFromDtosToBookAuthor(dto.getAuthorList(), newBook));
+//
+        List<BookAuthor> bookAuthors = new ArrayList<>();
+
+        for (AuthorDto authorDto : dto.getAuthorList()) {
+            Author author = authorRepository.findByName(authorDto.getName());
+            if (author == null) {
+                author = authorMapper.mapFromDto(authorDto);
+                author = authorRepository.save(author);
+            }
+
+            newBook.addBookAuthor(author, authorDto.getRole());
+            BookAuthor bookAuthor = new BookAuthor();
+            bookAuthor.setAuthor(authorMapper.mapFromDto(authorDto));
+            bookAuthor.setAuthorRole(authorDto.getRole());
+            bookAuthors.add(bookAuthor);
+        }
+//
+//        newBook.setGenres(genreMapper.mapFromDtosToBookGenre(dto.getGenreList(), newBook));
+
+//        newBook.setGenreList(getGenrenewBooks(dto));
+//        newBook.setLanguageList(getLanguagenewBooks(dto));
+//        newBook.setCharacterList(getCharacternewBooks(dto));
+//        newBook.setSettingList(getSettingnewBooks(dto));
+//        newBook.setAwardList(getAwardnewBooks(dto));
+//        newBook.setSeriesList(getSeriesnewBooks(dto));
+//        newBook.setFormatList(getFormatnewBooks(dto));
+//        newBook.setPublisher(getPublisherDto(dto));
+
+
+
+        return convertToBookResponseDto(newBook);
     }
 
 
-    private BookResponseDto convertToDto(Book book) {
+
+    private BookResponseDto convertToBookResponseDto(Book book) {
         BookResponseDto dto = new BookResponseDto();
         dto.setId(book.getId());
         dto.setIsbn(book.getIsbn());
@@ -145,6 +215,24 @@ public class BookService {
         dto.setAwardList(getAwardDtos(book));
         dto.setSeriesList(getSeriesDtos(book));
         dto.setFormatList(getFormatDtos(book));
+        dto.setPublisher(getPublisherDto(book));
+
+        return dto;
+
+    }
+
+    private BookResponseShortDto convertToBookResponseShortDto(Book book) {
+        BookResponseShortDto dto = new BookResponseShortDto();
+        dto.setId(book.getId());
+        dto.setTitle(book.getTitle());
+        dto.setDescription(book.getDescription());
+        dto.setRating(book.getRating());
+        dto.setPages(book.getPages());
+        dto.setPublishDate(book.getPublishDate());
+        dto.setFirstPublishDate(book.getFirstPublishDate());
+        dto.setNumRatings(book.getNumRatings());
+
+        dto.setAuthorList(getAuthorDtos(book));
         dto.setPublisher(getPublisherDto(book));
 
         return dto;
@@ -217,4 +305,6 @@ public class BookService {
     private PublisherDto getPublisherDto(Book book) {
         return publisherMapper.mapToDto(book.getPublisher());
     }
+
+
 }

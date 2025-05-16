@@ -1,10 +1,9 @@
 package org.example.springtask1.controller;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import org.example.springtask1.security.dto.LoginRequestDto;
-import org.example.springtask1.security.dto.LoginResponse;
-import org.example.springtask1.security.dto.RefreshResponse;
+import org.example.springtask1.dto.LoginRequestDto;
+import org.example.springtask1.dto.LoginResponse;
+import org.example.springtask1.dto.RefreshResponse;
 import org.example.springtask1.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

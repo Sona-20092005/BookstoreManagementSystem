@@ -3,6 +3,7 @@ package org.example.springtask1.service.dto;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.springtask1.persistence.entity.User;
+import org.example.springtask1.service.additional.RoleName;
 
 @Getter
 @Setter
@@ -12,6 +13,7 @@ public class UserDto {
     private String firstname;
     private String lastname;
     private String email;
+    private RoleName roleName;
     private Long createdAt;
     private Long updatedAt;
 
@@ -22,6 +24,7 @@ public class UserDto {
         userDto.setFirstname(user.getFirstname());
         userDto.setLastname(user.getLastname());
         userDto.setEmail(user.getEmail());
+        userDto.setRoleName(user.getRole().getName());
         userDto.setCreatedAt(user.getCreatedAt().toEpochMilli());
         userDto.setUpdatedAt(user.getUpdatedAt().toEpochMilli());
 
@@ -58,6 +61,14 @@ public class UserDto {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public RoleName getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(RoleName roleName) {
+        this.roleName = roleName;
     }
 
     public Long getCreatedAt() {

@@ -85,4 +85,16 @@ public class UserService {
 
         userRepository.deleteById(id);
     }
+
+    @Transactional
+    public UserDto changeUserRole(Long id, RoleName newRole) {
+        final User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        final Role role = roleRepository.findByName(newRole)
+                .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
+        user.setRole(role);
+
+        return UserDto.toDto(userRepository.save(user));
+    }
 }

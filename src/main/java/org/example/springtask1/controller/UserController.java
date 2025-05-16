@@ -3,6 +3,7 @@ package org.example.springtask1.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.springtask1.service.UserService;
+import org.example.springtask1.service.additional.RoleName;
 import org.example.springtask1.service.dto.UserDto;
 import org.example.springtask1.service.dto.UserRegistrationDto;
 import org.example.springtask1.service.dto.UserUpdateDto;
@@ -48,6 +49,12 @@ public class UserController {
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @Valid @RequestBody UserUpdateDto updateDto) {
         return ResponseEntity.ok(userService.updateUser(id, updateDto));
+    }
+
+    @PutMapping("/{id}/roles")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+    public ResponseEntity<UserDto> changeUserRole(@PathVariable Long id, @Valid @RequestParam RoleName role) {
+        return ResponseEntity.ok(userService.changeUserRole(id, role));
     }
 
     @DeleteMapping("/{id}")
